@@ -280,7 +280,7 @@ GP = [9 26 46 63];
 
 
 % COMPUTE AND PLOT EXONET TORQUE
-S.TAUs = zeros(length(S.PHIs),2,length(Grid));
+TAUs = zeros(length(S.PHIs),2,length(Grid));
 markerSize = 4;
 lineWidth = 1;
 
@@ -330,11 +330,11 @@ for t = 1:length(S.PHIs)
     o = 1;
     for i = 1:length(Xgrid):length(Grid)
     % ankle torque variance for each gait angle along the 9 directions
-    ankleVar(t,o) = var(S.TAUs(t,1,i:i+length(Xgrid)-1));
+    ankleVar(t,o) = var(TAUs(t,1,i:i+length(Xgrid)-1));
     % sum of the squares of knee torque error for each gait angle along the 9 directions
-    kneeErr(t,o) = sum((S.TAUs(t,2,i:i+length(Xgrid)-1)-S.TAUsDESIRED(t,2)).^2);
+    kneeErr(t,o) = sum((TAUs(t,2,i:i+length(Xgrid)-1)-S.TAUsDESIRED(t,2)).^2);
     % sum of the squares of knee torque for each gait angle along the 9 directions
-    kneeSum(t,o) = sum((S.TAUs(t,2,i:i+length(Xgrid)-1)).^2);
+    kneeSum(t,o) = sum((TAUs(t,2,i:i+length(Xgrid)-1)).^2);
     o = o + 1;
     end
 end

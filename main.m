@@ -17,7 +17,7 @@ fieldType = menu('Choose a field to approximate:', ...
 close all
 
 switch fieldType
-    case 1 % Knee-Ankle or Hip-Knee  
+    case 1 % Knee-Ankle or Hip-Knee
         setUpLeg % set variables and plots
         S = robustOptoLeg(S);
         %[p,c,TAUs,costs] = robustOptoLeg(PHIs,TAUsDESIRED,BODY,EXONET,nTries); % knee-ankle optimization
@@ -38,49 +38,47 @@ switch fieldType
         
     case 3 %Leg Opto
         S.case = 3;
-        %designOpto(S); %for future version that takes best solution from
-        %case 1.1 or 1.2
-        designOpto(S);
+        S = designOpto(S);
     otherwise
         disp('exiting...');
         close all
         
 end % end switch
 
-
-pp = S.p;
-for i = 1:3:length(pp)  % for loop to print the values of the optimal parameters
-    if abs(pp(i+1))>360 % to adjust the angle theta if it's higher than 360 degrees
-        while abs(pp(i+1))>360
-            pp(i+1) = sign(pp(i+1))*(abs(pp(i+1))-360);
+if S.case ~= 3
+    pp = S.p;
+    for i = 1:3:length(pp)  % for loop to print the values of the optimal parameters
+        if abs(pp(i+1))>360 % to adjust the angle theta if it's higher than 360 degrees
+            while abs(pp(i+1))>360
+                pp(i+1) = sign(pp(i+1))*(abs(pp(i+1))-360);
+            end
+        end
+        if pp(i)<0          % if r is negative
+            pp(i) = pp(i)*(-1);
+            pp(i+1) = pp(i+1)+180;
         end
     end
-    if pp(i)<0          % if r is negative
-        pp(i) = pp(i)*(-1);
-        pp(i+1) = pp(i+1)+180;
-    end
-end
-
-
-ppp = pp;
-for i = 2:3:length(ppp)
-    if abs(ppp(i))>360 % to adjust the angle theta if it's higher than 360 degrees
-        while abs(ppp(i))>360
-            ppp(i) = sign(ppp(i))*(abs(ppp(i))-360);
+    
+    
+    ppp = pp;
+    for i = 2:3:length(ppp)
+        if abs(ppp(i))>360 % to adjust the angle theta if it's higher than 360 degrees
+            while abs(ppp(i))>360
+                ppp(i) = sign(ppp(i))*(abs(ppp(i))-360);
+            end
         end
     end
+    
+    
+    fprintf('\n\n\n\n The Optimal Parameters for each Element are~~\n')
+    n = 1;
+    for i = 1:3:length(ppp)  % to print the values of the optimal parameters
+        fprintf('\n Element %d\n',n)
+        fprintf('\n r = %4.3f m   theta = %4.2f deg   L0 = %4.3f m\n',ppp(i),ppp(i+1),ppp(i+2))
+        n = n+1;
+    end
+    
 end
-
-
-fprintf('\n\n\n\n The Optimal Parameters for each Element are~~\n')
-n = 1;
-for i = 1:3:length(ppp)  % to print the values of the optimal parameters
-    fprintf('\n Element %d\n',n)
-    fprintf('\n r = %4.3f m   theta = %4.2f deg   L0 = %4.3f m\n',ppp(i),ppp(i+1),ppp(i+2))
-    n = n+1;
-end
-
-
 
 fprintf('\n END MAIN SCRIPT~~\n')
 
