@@ -1,9 +1,5 @@
-function [S]= setLegParameters()
+function S = setLegParameters(S)
 %Lengths, pose, Mass, RLoHi, thetaLoHi, L0LoHi, LL0LoHi, nParameters, K2j, K1j, K, nElements, springType, nJoints, nTries, AA
-% Create UIFigure and components
-clear
-clc
-close all
 % Create UIFigure and hide until all components are created
 UIFigure = uifigure('Visible', 'off');
 UIFigure.Position = [100 100 530 548];

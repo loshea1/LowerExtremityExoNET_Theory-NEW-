@@ -69,5 +69,11 @@ end
 
 end
 
-S.TAUs = TAUs;
+
+if S.GridPHIsVal ~= 1
+    S.TAUs = TAUs;
+else
+    S.GridTAUs = TAUs;
+end
+
 end

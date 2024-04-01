@@ -9,7 +9,8 @@ fprintf('\n\n\n\n MAIN SCRIPT~~\n')
 
 disp('Choose from the menu...')
 fieldType = menu('Choose a field to approximate:', ...
-    'Gait Torques', ...
+    'Knee-Ankle Gait Torques', ...
+    'Hip-Knee Gait Torques',...
     'Gait Stabilization',...
     'Leg Design Optimization',...
     'EXIT');
@@ -18,25 +19,28 @@ close all
 
 switch fieldType
     case 1 % Knee-Ankle or Hip-Knee
-        setUpLeg % set variables and plots
+        S.case = 1.1;
+        S = setUpLeg(S); % set variables and plots
         S = robustOptoLeg(S);
         %[p,c,TAUs,costs] = robustOptoLeg(PHIs,TAUsDESIRED,BODY,EXONET,nTries); % knee-ankle optimization
+        e = S.TAUsDESIRED - S.TAUs;
+    case 2 %Hip - ankle selected
+        S.case = 1.2;
+        S = setUpLeg(S); % set variables and plots
+        S = robustOptoLeg(S);
         %[p,c,TAUs,costs] = robustOptoLeg(PHIs,BODY,Position,EXONET,nTries);  % hip-ankle optimization
         
         e = S.TAUsDESIRED - S.TAUs;
-        
-        if S.EXONET.nJoints == 3 %Hip-ankle selected
-            
-            AveragePercentError = 100*(1-(norm(e)/norm(S.TAUsDESIRED)));
-            %showGraphTorquesLeg(S)
-        end
-        
-    case 2 %Gait stabilize
+        AveragePercentError = 100*(1-(norm(e)/norm(S.TAUsDESIRED)));
+        %showGraphTorquesLeg(S)
+    case 3 %Gait stabilize
         S.case = 2;
-        setUpLeg % set variables and plots
+        S = setUpLeg(S); % set variables and plots
         drawArrows
+        S = robustOptoLeg(S);
+        e = S.AllTAUsDESIRED - S.TAUs; %uses all TAUs desired.
         
-    case 3 %Leg Opto
+    case 4 %Leg Opto
         S.case = 3;
         S = designOpto(S);
     otherwise

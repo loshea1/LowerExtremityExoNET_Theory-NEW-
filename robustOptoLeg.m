@@ -11,6 +11,7 @@ function S = robustOptoLeg(S)
 fprintf('\n\n\n\n robustOpto~~\n')
 drawnow    % to update the figures in the graphic screen
 pause(0.1) % to pause for 0.1 seconds before continuing
+S.GridPHIsVal = 0;
 
 if S.EXONET.nJoints == 11 || S.EXONET.nJoints == 22 ||S.EXONET.nJoints == 2
     ProjectName = 'Ankle ExoNET';
@@ -51,6 +52,8 @@ if S.case == 1.1
     
     subplot(1,2,1)
     drawMan;
+    subplot(1,2,1); axis(ax1); % to reframe the window
+    subplot(1,2,2); axis(ax2); % to reframe the window
 elseif S.case == 1.2
     drawBodyLeg(S.BODY);
     plotVectFieldLeg(S.PHIs,S.TAUsDESIRED,'r'); % to plot the desired torque field in red
@@ -63,8 +66,10 @@ elseif S.case == 1.2
     
     subplot(1,2,1)
     drawBodyLeg(S.BODY);
+    subplot(1,2,1); axis(ax1); % to reframe the window
+    subplot(1,2,2); axis(ax2); % to reframe the window
     
-elseif S.case == 2
+elseif S.case == 2 %gait stabilization
     plotVectFieldLeg(S.AllPHIs,S.AllTAUsDESIRED,'r'); % to plot the desired torque field in red
     plotVectFieldLeg(S.AllPHIs,S.TAUs,[0.9 0.9 0.9]); % to plot the initial guess in grey
     axis([-20 50 -10 100])
@@ -75,8 +80,7 @@ end
 
 S = drawExonetsLeg(S.bestP, S); % to draw the ExoNET line segments
 
-subplot(1,2,1); axis(ax1); % to reframe the window
-subplot(1,2,2); axis(ax2); % to reframe the window
+
 
 title(ProjectName)
 drawnow; pause(0.1) % to show the plots
@@ -175,7 +179,7 @@ elseif S.case == 2
     plotVectFieldLeg(S.GridPHIs,S.GridTAUs,[0.6863 0.6980 0.8510]); % to plot ExoNET torques in the grid
     
     drawMan;
-    drawExonetsLeg(bestP); % to draw the ExoNET line segments
+    S = drawExonetsLeg(S.bestP, S); % to draw the ExoNET line segments
     title([ProjectName ', Average Error = ' num2str(meanErr)],'FontSize',14) % to show the average error
 end
 
